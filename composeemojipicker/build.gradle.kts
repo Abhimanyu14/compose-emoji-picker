@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
 }
 
 android {
@@ -50,4 +51,18 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.0-alpha05")
     implementation("androidx.emoji2:emoji2:1.4.0")
     implementation("com.github.Abhimanyu14:emoji-core:1.0.4")
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                groupId = "com.github.Abhimanyu14"
+                artifactId = "compose-emoji-picker"
+                version = "1.0.0-alpha01"
+
+                from(components["release"])
+            }
+        }
+    }
 }
