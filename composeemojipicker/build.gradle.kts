@@ -53,14 +53,14 @@ dependencies {
     implementation("com.github.Abhimanyu14:emoji-core:1.0.4")
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("java") {
-                groupId = "com.github.Abhimanyu14"
-                artifactId = "compose-emoji-picker"
-                version = "1.0.0-alpha02"
 
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            groupId = "com.github.Abhimanyu14"
+            artifactId = "compose-emoji-picker"
+            version = "1.0.0-alpha03"
+            afterEvaluate {
                 from(components["release"])
             }
         }
