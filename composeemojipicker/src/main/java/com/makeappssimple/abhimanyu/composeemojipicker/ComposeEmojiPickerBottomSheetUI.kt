@@ -34,11 +34,11 @@ import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultEmojiPadding
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.isEmojiRenderable
 import emoji.core.datasource.EmojiDataSource
 import emoji.core.datasource.EmojiDataSourceImpl
-import emoji.core.model.NetworkEmoji
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale.filter
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -166,15 +166,15 @@ fun ComposeEmojiPickerBottomSheetUI(
     groupTitleTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     emojiFontSize: TextUnit = defaultEmojiFontSize,
     searchText: String = "",
-    onEmojiClick: (emoji: NetworkEmoji) -> Unit,
-    onEmojiLongClick: ((emoji: NetworkEmoji) -> Unit)? = null,
+    onEmojiClick: (emoji: Emoji) -> Unit,
+    onEmojiLongClick: ((emoji: Emoji) -> Unit)? = null,
     updateSearchText: ((updatedSearchText: String) -> Unit)? = null,
 ) {
     var isLoading by remember {
         mutableStateOf(false)
     }
     var emojis by remember {
-        mutableStateOf(emptyList<NetworkEmoji>())
+        mutableStateOf(emptyList<Emoji>())
     }
     val emojiGroups by remember(
         key1 = emojis,
@@ -210,7 +210,9 @@ fun ComposeEmojiPickerBottomSheetUI(
             val emojiDataSource: EmojiDataSource = EmojiDataSourceImpl()
             withContext(Dispatchers.Main) {
                 isLoading = true
-                emojis = emojiDataSource.getAllEmojis().filter {
+                emojis = emojiDataSource.getAllEmojis().map {
+                    Emoji(it)
+                }.filter {
                     isEmojiRenderable(it)
                 }
                 isLoading = false
