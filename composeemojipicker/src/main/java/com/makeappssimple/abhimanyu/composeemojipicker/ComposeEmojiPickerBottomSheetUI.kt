@@ -13,7 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +33,14 @@ import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultBackgroundCo
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultEmojiFontSize
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultEmojiPadding
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultGroupTitleTextColor
+import com.makeappssimple.abhimanyu.composeemojipicker.utils.isEmojiRenderable
+import emoji.core.datasource.EmojiDataSource
+import emoji.core.datasource.EmojiDataSourceImpl
 import emoji.core.model.NetworkEmoji
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -40,15 +51,12 @@ val gray = Color(0xFF848686)
 /*
 */
 /**
- * Mandatory parameters - Only [emojiGroups] and [onEmojiClick] are mandatory parameters.
+ * Mandatory parameters - Only [onEmojiClick] is mandatory parameter.
  *
- * @param emojiGroups A map of emoji groups and emojis in each group
  * @param onEmojiClick Click handler
  *
  * @param backgroundColor Whether the incoming min constraints should be passed to content.
  * @param onEmojiLongClick Whether the incoming min constraints should be passed to content.
- * @param groupHeader Custom slot for the emoji group sticky header
- * @param searchBar Custom slot for the search bar
  *//*
 
 @Composable
@@ -154,22 +162,63 @@ private fun LazyListScope.composeEmojiPickerEmojiGrid(
 @Composable
 fun ComposeEmojiPickerBottomSheetUI(
     modifier: Modifier = Modifier,
-    emojiGroups: Map<String, List<NetworkEmoji>>,
     backgroundColor: Color = defaultBackgroundColor,
     groupTitleTextColor: Color = defaultGroupTitleTextColor,
     searchBarColor: Color = MaterialTheme.colorScheme.primaryContainer,
     groupTitleTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     emojiFontSize: TextUnit = defaultEmojiFontSize,
-    searchText: String? = null,
+    searchText: String = "",
     onEmojiClick: (emoji: NetworkEmoji) -> Unit,
     onEmojiLongClick: ((emoji: NetworkEmoji) -> Unit)? = null,
     updateSearchText: ((updatedSearchText: String) -> Unit)? = null,
 ) {
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
+    var emojis by remember {
+        mutableStateOf(emptyList<NetworkEmoji>())
+    }
+    val emojiGroups by remember(
+        key1 = emojis,
+        key2 = searchText,
+    ) {
+        mutableStateOf(emojis.filter { emoji ->
+            if (searchText.isBlank()) {
+                true
+            } else {
+                emoji.unicodeName.contains(
+                    other = searchText,
+                )
+            }
+        }.groupBy { emoji ->
+            emoji.group
+        }.filter { (_, emojis) ->
+            emojis.isNotEmpty()
+        })
+    }
+
     val firstEmoji = emojiGroups.values.firstOrNull()?.firstOrNull()?.character
     val emojiWidth = rememberEmojiWidth(
         firstEmoji = firstEmoji,
         emojiFontSize = emojiFontSize,
     )
+
+
+
+    LaunchedEffect(
+        key1 = Unit,
+    ) {
+        CoroutineScope(Dispatchers.Default).launch {
+            val emojiDataSource: EmojiDataSource = EmojiDataSourceImpl()
+            withContext(Dispatchers.Main) {
+                isLoading = true
+                emojis = emojiDataSource.getAllEmojis().filter {
+                    isEmojiRenderable(it)
+                }
+                isLoading = false
+            }
+        }
+    }
 
     Column(
         modifier = modifier
@@ -185,7 +234,7 @@ fun ComposeEmojiPickerBottomSheetUI(
         ComposeEmojiPickerSearchBar(
             backgroundColor = backgroundColor,
             searchBarColor = searchBarColor,
-            text = searchText.orEmpty(),
+            text = searchText,
             onValueChange = updateSearchText ?: {},
         )
         BoxWithConstraints(
@@ -196,7 +245,11 @@ fun ComposeEmojiPickerBottomSheetUI(
                 modifier = Modifier
                     .fillMaxWidth(),
             ) {
-                if (firstEmoji == null || emojiWidth == null) {
+                if (isLoading) {
+                    item {
+                        ComposeEmojiPickerLoadingUI()
+                    }
+                } else if (firstEmoji == null || emojiWidth == null) {
                     item {
                         ComposeEmojiPickerEmptyUI()
                     }

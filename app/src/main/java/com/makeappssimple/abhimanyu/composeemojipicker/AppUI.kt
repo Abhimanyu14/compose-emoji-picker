@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,14 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.capitalizeWords
-import com.makeappssimple.abhimanyu.composeemojipicker.utils.isEmojiRenderable
-import emoji.core.datasource.EmojiDataSource
-import emoji.core.datasource.EmojiDataSourceImpl
-import emoji.core.model.NetworkEmoji
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,9 +32,6 @@ fun AppUI() {
     )
 
     val context = LocalContext.current
-    var emojis by remember {
-        mutableStateOf(emptyList<NetworkEmoji>())
-    }
     var isModalBottomSheetVisible by remember {
         mutableStateOf(false)
     }
@@ -52,35 +40,6 @@ fun AppUI() {
     }
     var searchText by remember {
         mutableStateOf("")
-    }
-    val emojiGroups by remember(
-        key1 = emojis,
-        key2 = searchText,
-    ) {
-        mutableStateOf(emojis.filter { emoji ->
-            if (searchText.isBlank()) {
-                true
-            } else {
-                emoji.unicodeName.contains(searchText)
-            }
-        }.groupBy { emoji ->
-            emoji.group
-        }.filter { (_, emojis) ->
-            emojis.isNotEmpty()
-        })
-    }
-
-    LaunchedEffect(
-        key1 = Unit,
-    ) {
-        CoroutineScope(Dispatchers.Default).launch {
-            val emojiDataSource: EmojiDataSource = EmojiDataSourceImpl()
-            withContext(Dispatchers.Main) {
-                emojis = emojiDataSource.getAllEmojis().filter {
-                    isEmojiRenderable(it)
-                }
-            }
-        }
     }
 
     if (isModalBottomSheetVisible) {
@@ -100,7 +59,6 @@ fun AppUI() {
                     .fillMaxSize(),
             ) {
                 ComposeEmojiPickerBottomSheetUI(
-                    emojiGroups = emojiGroups,
                     backgroundColor = Color(0xFFEAF9FF),
                     groupTitleTextColor = Color(0xFF444444),
                     searchBarColor = Color(0xFFD5F4FF),
