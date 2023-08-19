@@ -59,10 +59,10 @@ fun AppUI() {
                     .fillMaxSize(),
             ) {
                 ComposeEmojiPickerBottomSheetUI(
-                    backgroundColor = Color(0xFFEAF9FF),
-                    groupTitleTextColor = Color(0xFF444444),
-                    searchBarColor = Color(0xFFD5F4FF),
-                    groupTitleTextStyle = MaterialTheme.typography.titleSmall,
+//                    backgroundColor = Color(0xFFEAF9FF),
+//                    groupTitleTextColor = Color(0xFF444444),
+//                    searchBarColor = Color(0xFFD5F4FF),
+//                    groupTitleTextStyle = MaterialTheme.typography.titleSmall,
                     onEmojiClick = { emoji ->
                         isModalBottomSheetVisible = false
                         selectedEmoji = emoji.character

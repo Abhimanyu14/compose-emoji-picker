@@ -28,12 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -47,9 +49,18 @@ fun ComposeEmojiPickerSearchBar(
     isAutoFocusEnabled: Boolean = true,
     backgroundColor: Color,
     searchBarColor: Color,
-    textColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
-    placeholderText: String = defaultPlaceholderText,
+
     text: String,
+    textColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+
+    placeholderText: String = defaultPlaceholderText,
+    placeholderTextColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+    placeholderTextStyle: TextStyle = MaterialTheme.typography.headlineLarge,
+
+    cursorBrush: Brush = SolidColor(
+        value = MaterialTheme.colorScheme.primary,
+    ),
     onSearch: () -> Unit = {},
     onValueChange: (updatedSearchText: String) -> Unit = {},
 ) {
@@ -90,10 +101,9 @@ fun ComposeEmojiPickerSearchBar(
                 .focusRequester(
                     focusRequester = focusRequester,
                 ),
-            textStyle = MaterialTheme.typography.bodyMedium
-                .copy(
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                ),
+            textStyle = textStyle.copy(
+                color = textColor,
+            ),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Search,
             ),
@@ -103,9 +113,7 @@ fun ComposeEmojiPickerSearchBar(
                 },
             ),
             singleLine = true,
-            cursorBrush = SolidColor(
-                value = MaterialTheme.colorScheme.primary,
-            ),
+            cursorBrush = cursorBrush,
             decorationBox = {
                 TextFieldDefaults.DecorationBox(
                     value = text,
@@ -119,9 +127,9 @@ fun ComposeEmojiPickerSearchBar(
                     placeholder = {
                         Text(
                             text = placeholderText,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = placeholderTextStyle
                                 .copy(
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    color = placeholderTextColor,
                                 ),
                         )
                     },

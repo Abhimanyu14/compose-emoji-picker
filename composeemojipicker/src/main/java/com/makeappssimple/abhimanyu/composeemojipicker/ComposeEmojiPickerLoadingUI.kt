@@ -23,7 +23,7 @@ fun ComposeEmojiPickerLoadingUI() {
         Text(
             text = "Fetching Emoji ...",
             color = MaterialTheme.colorScheme.onBackground,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.headlineMedium,
         )
     }
 }

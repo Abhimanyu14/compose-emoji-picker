@@ -38,7 +38,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Locale.filter
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -161,9 +160,11 @@ private fun LazyListScope.composeEmojiPickerEmojiGrid(
 fun ComposeEmojiPickerBottomSheetUI(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.background,
-    groupTitleTextColor: Color = MaterialTheme.colorScheme.onBackground,
     searchBarColor: Color = MaterialTheme.colorScheme.primaryContainer,
-    groupTitleTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+
+    groupTitleTextColor: Color = MaterialTheme.colorScheme.onBackground,
+    groupTitleTextStyle: TextStyle = MaterialTheme.typography.headlineMedium,
+
     emojiFontSize: TextUnit = defaultEmojiFontSize,
     searchText: String = "",
     onEmojiClick: (emoji: Emoji) -> Unit,
@@ -200,8 +201,6 @@ fun ComposeEmojiPickerBottomSheetUI(
         firstEmoji = firstEmoji,
         emojiFontSize = emojiFontSize,
     )
-
-
 
     LaunchedEffect(
         key1 = Unit,

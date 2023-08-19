@@ -23,7 +23,7 @@ fun ComposeEmojiPickerEmptyUI() {
         Text(
             text = "No Emoji Found 😕",
             color = MaterialTheme.colorScheme.onBackground,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.headlineMedium,
         )
     }
 }
