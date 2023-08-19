@@ -19,8 +19,6 @@ val defaultEmojiPadding = 4.dp
  * Color
  */
 val defaultBackgroundColor: Color = Color.Black
-val defaultGroupTitleBackgroundColor = Color.Black
-val defaultGroupTitleTextColor = Color.LightGray
 
 /**
  * Shape
@@ -30,4 +28,4 @@ val defaultEmojiUIShape = CircleShape
 /**
  * String
  */
-val defaultPlaceholderText = "Search Emojis"
+const val defaultPlaceholderText = "Search Emojis"

@@ -29,10 +29,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.NavigationBarPadding
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.StatusBarPadding
-import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultBackgroundColor
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultEmojiFontSize
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultEmojiPadding
-import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultGroupTitleTextColor
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.isEmojiRenderable
 import emoji.core.datasource.EmojiDataSource
 import emoji.core.datasource.EmojiDataSourceImpl
@@ -162,8 +160,8 @@ private fun LazyListScope.composeEmojiPickerEmojiGrid(
 @Composable
 fun ComposeEmojiPickerBottomSheetUI(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = defaultBackgroundColor,
-    groupTitleTextColor: Color = defaultGroupTitleTextColor,
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
+    groupTitleTextColor: Color = MaterialTheme.colorScheme.onBackground,
     searchBarColor: Color = MaterialTheme.colorScheme.primaryContainer,
     groupTitleTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     emojiFontSize: TextUnit = defaultEmojiFontSize,

@@ -67,6 +67,4 @@ dependencies {
 
     implementation("com.google.android.material:compose-theme-adapter:1.2.1")
     implementation("androidx.emoji2:emoji2:1.4.0")
-    implementation("com.github.Abhimanyu14:emoji-core:1.0.4")
-
 }
