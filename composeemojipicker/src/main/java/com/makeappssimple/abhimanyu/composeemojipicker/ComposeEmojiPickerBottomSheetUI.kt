@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -38,6 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -171,6 +173,7 @@ fun ComposeEmojiPickerBottomSheetUI(
     onEmojiLongClick: ((emoji: Emoji) -> Unit)? = null,
     updateSearchText: ((updatedSearchText: String) -> Unit)? = null,
 ) {
+    val context = LocalContext.current
     var isLoading by remember {
         mutableStateOf(false)
     }
@@ -206,7 +209,9 @@ fun ComposeEmojiPickerBottomSheetUI(
         key1 = Unit,
     ) {
         CoroutineScope(Dispatchers.Default).launch {
-            val emojiDataSource: EmojiDataSource = EmojiDataSourceImpl()
+            val emojiDataSource: EmojiDataSource = EmojiDataSourceImpl(
+                cacheFile = File(context.cacheDir, "http_cache"),
+            )
             withContext(Dispatchers.Main) {
                 isLoading = true
                 emojis = emojiDataSource.getAllEmojis().map {
