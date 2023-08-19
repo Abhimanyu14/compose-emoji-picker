@@ -59,7 +59,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.github.Abhimanyu14"
             artifactId = "compose-emoji-picker"
-            version = "1.0.0-alpha09"
+            version = "1.0.0-alpha10"
             afterEvaluate {
                 from(components["release"])
             }
