@@ -1,1 +1,1 @@
-# compose-emoji-picker
+# Compose Emoji Picker

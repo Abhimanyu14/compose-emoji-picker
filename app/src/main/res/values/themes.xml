@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.ComposeEmojiPicker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!-- Status bar icon color -->
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+</resources>
