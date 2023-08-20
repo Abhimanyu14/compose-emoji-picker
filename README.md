@@ -33,6 +33,10 @@ dependencies {
 }
 ```
 
+# Demo 
+
+https://github.com/Abhimanyu14/compose-emoji-picker/assets/29737108/88491846-bbba-4543-b79e-4166d7ddb6c0
+
 # Usage
 
 ```kotlin
