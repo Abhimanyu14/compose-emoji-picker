@@ -2,17 +2,18 @@
 
 <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
 
-Compose Emoji Picker uses [Emoji Core](https://github.com/Abhimanyu14/emoji-core) to fetch all latest emojis and display them in a grid.
+Compose Emoji Picker uses [Emoji Core](https://github.com/Abhimanyu14/emoji-core) to fetch all the latest emojis and display them in a grid.
 
 # Features
 
-1. Search and Filter
-2. Grouping
-3. Sticky Group Names
+1. Added checks to skip emojis that can not be rendered instead of showing them as tofu (􏿿).
+2. Searching and Filtering
+3. All emoji from Unicode emoji version 15.0 (latest) are available. (as supported by device)
+4. Sticky header for the group name
 
 # Setup
 
-Latest version can be found here </br>
+The latest version can be found here </br>
 [![](https://jitpack.io/v/Abhimanyu14/compose-emoji-picker.svg)](https://jitpack.io/#Abhimanyu14/compose-emoji-picker)
 
 1. Add it in your root `build.gradle` at the end of repositories:
