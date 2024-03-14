@@ -174,32 +174,41 @@ fun ComposeEmojiPickerBottomSheetUI(
     updateSearchText: ((updatedSearchText: String) -> Unit)? = null,
 ) {
     val context = LocalContext.current
-    var isLoading by remember {
-        mutableStateOf(false)
+    var emojisResult: MyResult<List<Emoji>> by remember {
+        mutableStateOf(MyResult.Loading)
     }
-    var emojis by remember {
-        mutableStateOf(emptyList<Emoji>())
-    }
-    val emojiGroups by remember(
-        key1 = emojis,
+    val emojiGroups: Map<String, List<Emoji>> = remember(
+        key1 = emojisResult,
         key2 = searchText,
     ) {
-        mutableStateOf(emojis.filter { emoji ->
-            if (searchText.isBlank()) {
-                true
-            } else {
-                emoji.unicodeName.contains(
-                    other = searchText,
-                )
+        when (emojisResult) {
+            is MyResult.Success -> {
+                (emojisResult as MyResult.Success<List<Emoji>>).data.filter { emoji ->
+                    if (searchText.isBlank()) {
+                        true
+                    } else {
+                        emoji.unicodeName.contains(
+                            other = searchText,
+                        )
+                    }
+                }.groupBy { emoji ->
+                    emoji.group
+                }.filter { (_, emojis) ->
+                    emojis.isNotEmpty()
+                }
             }
-        }.groupBy { emoji ->
-            emoji.group
-        }.filter { (_, emojis) ->
-            emojis.isNotEmpty()
-        })
+
+            else -> {
+                emptyMap()
+            }
+        }
     }
 
-    val firstEmoji = emojiGroups.values.firstOrNull()?.firstOrNull()?.character
+    val firstEmoji = if (emojiGroups.isNotEmpty()) {
+        emojiGroups.values.firstOrNull()?.firstOrNull()?.character
+    } else {
+        null
+    }
     val emojiWidth = rememberEmojiWidth(
         firstEmoji = firstEmoji,
         emojiFontSize = emojiFontSize,
@@ -213,13 +222,19 @@ fun ComposeEmojiPickerBottomSheetUI(
                 cacheFile = File(context.cacheDir, "http_cache"),
             )
             withContext(Dispatchers.Main) {
-                isLoading = true
-                emojis = emojiDataSource.getAllEmojis().map {
-                    Emoji(it)
-                }.filter {
-                    isEmojiRenderable(it)
+                emojisResult = try {
+                    MyResult.Success(
+                        data = emojiDataSource.getAllEmojis().map {
+                            Emoji(it)
+                        }.filter {
+                            isEmojiRenderable(it)
+                        },
+                    )
+                } catch (ioException: Exception) {
+                    MyResult.Error(ioException)
+                } catch (exception: Exception) {
+                    MyResult.Error(exception)
                 }
-                isLoading = false
             }
         }
     }
@@ -249,52 +264,60 @@ fun ComposeEmojiPickerBottomSheetUI(
                 modifier = Modifier
                     .fillMaxWidth(),
             ) {
-                if (isLoading) {
-                    item {
+                when (emojisResult) {
+                    is MyResult.Error -> item {
+                        ComposeEmojiPickerErrorUI()
+                    }
+
+                    MyResult.Loading -> item {
                         ComposeEmojiPickerLoadingUI()
                     }
-                } else if (firstEmoji == null || emojiWidth == null) {
-                    item {
-                        ComposeEmojiPickerEmptyUI()
-                    }
-                } else {
-                    val (columnCount, itemPadding) = getColumnData(
-                        maxColumnWidth = maxWidth,
-                        emojiWidth = emojiWidth,
-                    )
-                    emojiGroups.map { (group, emojis) ->
-                        stickyHeader {
-                            ComposeEmojiPickerGroupTitle(
-                                backgroundColor = backgroundColor,
-                                titleTextColor = groupTitleTextColor,
-                                titleText = "$group (${emojis.size})",
-                                titleTextStyle = groupTitleTextStyle,
-                            )
-                        }
-                        emojis.chunked(
-                            size = columnCount,
-                        ).map {
+
+                    is MyResult.Success -> {
+                        if (firstEmoji == null || emojiWidth == null) {
                             item {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Start,
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    it.forEach { emoji ->
-                                        ComposeEmojiPickerEmojiUI(
+                                ComposeEmojiPickerEmptyUI()
+                            }
+                        } else {
+                            val (columnCount, itemPadding) = getColumnData(
+                                maxColumnWidth = maxWidth,
+                                emojiWidth = emojiWidth,
+                            )
+                            emojiGroups.map { (group, emojis) ->
+                                stickyHeader {
+                                    ComposeEmojiPickerGroupTitle(
+                                        backgroundColor = backgroundColor,
+                                        titleTextColor = groupTitleTextColor,
+                                        titleText = "$group (${emojis.size})",
+                                        titleTextStyle = groupTitleTextStyle,
+                                    )
+                                }
+                                emojis.chunked(
+                                    size = columnCount,
+                                ).map {
+                                    item {
+                                        Row(
                                             modifier = Modifier
-                                                .padding(
-                                                    horizontal = itemPadding,
-                                                ),
-                                            emojiCharacter = emoji.character,
-                                            onClick = {
-                                                onEmojiClick(emoji)
-                                            },
-                                            onLongClick = {
-                                                onEmojiLongClick?.invoke(emoji)
-                                            },
-                                        )
+                                                .fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.Start,
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            it.forEach { emoji ->
+                                                ComposeEmojiPickerEmojiUI(
+                                                    modifier = Modifier
+                                                        .padding(
+                                                            horizontal = itemPadding,
+                                                        ),
+                                                    emojiCharacter = emoji.character,
+                                                    onClick = {
+                                                        onEmojiClick(emoji)
+                                                    },
+                                                    onLongClick = {
+                                                        onEmojiLongClick?.invoke(emoji)
+                                                    },
+                                                )
+                                            }
+                                        }
                                     }
                                 }
                             }
