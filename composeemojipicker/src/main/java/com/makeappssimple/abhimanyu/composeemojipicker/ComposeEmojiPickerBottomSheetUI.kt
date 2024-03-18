@@ -28,6 +28,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.NavigationBarPadding
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.StatusBarPadding
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultEmojiFontSize
@@ -339,8 +340,12 @@ private fun getColumnData(
     val emojiWidthWithPadding = emojiWidth + (defaultEmojiPadding * 2)
     val columnCount = (maxColumnWidth / (emojiWidthWithPadding)).toInt()
     val ceilEmojiWidth = ceil(emojiWidthWithPadding.value).dp
-    val itemPadding =
-        floor(((maxColumnWidth - (ceilEmojiWidth * columnCount)) / (2 * columnCount)).value).dp
+    val itemPadding = floor(
+        x = max(
+            a = 0.dp,
+            b = (maxColumnWidth - (ceilEmojiWidth * columnCount)) / (2 * columnCount),
+        ).value,
+    ).dp
     return Pair(columnCount, itemPadding)
 }
 
