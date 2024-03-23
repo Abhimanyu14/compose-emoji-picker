@@ -9,7 +9,9 @@ data class Emoji(
     val subgroup: String,
     val unicodeName: String,
 ) {
-    constructor(networkEmoji: NetworkEmoji) : this(
+    constructor(
+        networkEmoji: NetworkEmoji,
+    ) : this(
         character = networkEmoji.character,
         codePoint = networkEmoji.codePoint,
         group = networkEmoji.group,

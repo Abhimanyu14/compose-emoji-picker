@@ -16,11 +16,6 @@ val defaultEmojiFontSize = 28.sp
 val defaultEmojiPadding = 4.dp
 
 /**
- * Color
- */
-val defaultBackgroundColor: Color = Color.Black
-
-/**
  * Shape
  */
 val defaultEmojiUIShape = CircleShape

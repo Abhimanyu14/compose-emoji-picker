@@ -33,23 +33,20 @@ import com.makeappssimple.abhimanyu.composeemojipicker.utils.NavigationBarPaddin
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.StatusBarPadding
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultEmojiFontSize
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultEmojiPadding
-import com.makeappssimple.abhimanyu.composeemojipicker.utils.isEmojiRenderable
+import com.makeappssimple.abhimanyu.composeemojipicker.utils.isEmojiCharacterRenderable
 import emoji.core.datasource.EmojiDataSource
 import emoji.core.datasource.EmojiDataSourceImpl
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.math.ceil
 import kotlin.math.floor
 
-val black = Color(0xFF1C2020)
-val white = Color(0xFFF2F7F7)
-val gray = Color(0xFF848686)
+private object ComposeEmojiPickerBottomSheetConstants {
+    const val CACHE_FILE_NAME = "http_cache"
+    val defaultMinHeight = 100.dp
+}
 
-/*
-*/
 /**
  * Mandatory parameters - Only [onEmojiClick] is mandatory parameter.
  *
@@ -57,107 +54,7 @@ val gray = Color(0xFF848686)
  *
  * @param backgroundColor Whether the incoming min constraints should be passed to content.
  * @param onEmojiLongClick Whether the incoming min constraints should be passed to content.
- *//*
-
-@Composable
-fun ComposeEmojiPickerBottomSheetUI(
-    modifier: Modifier = Modifier,
-
-    addNavigationBarPadding: Boolean = true,
-    addStatusBarPadding: Boolean = true,
-    backgroundColor: Color = defaultBackgroundColor,
-    emojiGroups: Map<String, List<NetworkEmoji>>,
-
-    groupHeader: @Composable ((group: String, emojis: List<NetworkEmoji>) -> Unit)? = null,
-    searchBar: @Composable (() -> Unit)? = null,
-    emptyUI: @Composable (() -> Unit)? = null,
-    emojiUI: @Composable (() -> Unit)? = null,
-) {
-    val firstEmoji: String? = emojiGroups.values.firstOrNull()?.firstOrNull()?.character
-
-    Column(
-        modifier = modifier
-            .background(
-                color = backgroundColor,
-            )
-            .fillMaxWidth()
-            .defaultMinSize(
-                minHeight = 100.dp,
-            ),
-    ) {
-        if (addStatusBarPadding) {
-            StatusBarPadding()
-        }
-        searchBar?.invoke()
-        BoxWithConstraints(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                if (firstEmoji == null) {
-                    item {
-                        emptyUI?.invoke()
-                    }
-                } else {
-                    composeEmojiPickerEmojiGrid(
-                        firstEmoji = firstEmoji,
-                        maxWidth = maxWidth,
-                        emojiGroups = emojiGroups,
-                        groupHeader = groupHeader,
-                        emojiUI = emojiUI
-                    )
-                }
-                item {
-                    if (addNavigationBarPadding) {
-                        NavigationBarPadding()
-                    }
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-private fun LazyListScope.composeEmojiPickerEmojiGrid(
-    firstEmoji: String,
-    maxWidth: Dp,
-    emojiGroups: Map<String, List<NetworkEmoji>>,
-    groupHeader: @Composable ((group: String, emojis: List<NetworkEmoji>) -> Unit)?,
-    emojiUI: @Composable (() -> Unit)?,
-) {
-    val emojiWidth = rememberEmojiWidth(
-        firstEmoji = firstEmoji,
-        emojiFontSize = 28.sp,
-    )
-    val (columnCount, itemPadding) = getColumnData(
-        maxColumnWidth = maxWidth,
-        emojiWidth = emojiWidth,
-    )
-    emojiGroups.map { (group, emojis) ->
-        stickyHeader {
-            groupHeader?.invoke(group, emojis)
-        }
-        emojis.chunked(
-            size = columnCount,
-        ).map {
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    it.forEach { emoji ->
-                        emojiUI?.invoke()
-                    }
-                }
-            }
-        }
-    }
-}
-*/
-
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ComposeEmojiPickerBottomSheetUI(
@@ -204,11 +101,12 @@ fun ComposeEmojiPickerBottomSheetUI(
             }
         }
     }
-
-    val firstEmoji = if (emojiGroups.isNotEmpty()) {
-        emojiGroups.values.firstOrNull()?.firstOrNull()?.character
-    } else {
-        null
+    val firstEmoji: String? = remember(emojiGroups) {
+        if (emojiGroups.isNotEmpty()) {
+            emojiGroups.values.firstOrNull()?.firstOrNull()?.character
+        } else {
+            null
+        }
     }
     val emojiWidth = rememberEmojiWidth(
         firstEmoji = firstEmoji,
@@ -218,23 +116,42 @@ fun ComposeEmojiPickerBottomSheetUI(
     LaunchedEffect(
         key1 = Unit,
     ) {
-        CoroutineScope(Dispatchers.Default).launch {
+        withContext(
+            context = Dispatchers.IO,
+        ) {
             val emojiDataSource: EmojiDataSource = EmojiDataSourceImpl(
-                cacheFile = File(context.cacheDir, "http_cache"),
+                cacheFile = File(
+                    context.cacheDir,
+                    ComposeEmojiPickerBottomSheetConstants.CACHE_FILE_NAME,
+                ),
             )
-            withContext(Dispatchers.Main) {
+            withContext(
+                context = Dispatchers.Main,
+            ) {
                 emojisResult = try {
                     MyResult.Success(
-                        data = emojiDataSource.getAllEmojis().map {
-                            Emoji(it)
+                        data = emojiDataSource.getAllEmojis().map { networkEmoji ->
+                            Emoji(
+                                networkEmoji = networkEmoji,
+                            )
                         }.filter {
-                            isEmojiRenderable(it)
+                            isEmojiCharacterRenderable(
+                                emojiCharacter = it.character,
+                            )
                         },
                     )
-                } catch (ioException: Exception) {
-                    MyResult.Error(ioException)
-                } catch (exception: Exception) {
-                    MyResult.Error(exception)
+                } catch (
+                    ioException: Exception,
+                ) {
+                    MyResult.Error(
+                        exception = ioException,
+                    )
+                } catch (
+                    exception: Exception,
+                ) {
+                    MyResult.Error(
+                        exception = exception,
+                    )
                 }
             }
         }
@@ -247,7 +164,7 @@ fun ComposeEmojiPickerBottomSheetUI(
                 color = backgroundColor,
             )
             .defaultMinSize(
-                minHeight = 100.dp,
+                minHeight = ComposeEmojiPickerBottomSheetConstants.defaultMinHeight,
             ),
     ) {
         StatusBarPadding()
@@ -295,7 +212,7 @@ fun ComposeEmojiPickerBottomSheetUI(
                                 }
                                 emojis.chunked(
                                     size = columnCount,
-                                ).map {
+                                ).map { emojiList ->
                                     item {
                                         Row(
                                             modifier = Modifier
@@ -303,7 +220,7 @@ fun ComposeEmojiPickerBottomSheetUI(
                                             horizontalArrangement = Arrangement.Start,
                                             verticalAlignment = Alignment.CenterVertically,
                                         ) {
-                                            it.forEach { emoji ->
+                                            emojiList.map { emoji ->
                                                 ComposeEmojiPickerEmojiUI(
                                                     modifier = Modifier
                                                         .padding(
@@ -352,23 +269,24 @@ private fun getColumnData(
 @Composable
 private fun rememberEmojiWidth(
     firstEmoji: String?,
-    emojiFontSize: TextUnit
+    emojiFontSize: TextUnit,
 ): Dp? {
     if (firstEmoji == null) {
         return null
     }
     val density = LocalDensity.current
     val textMeasurer = rememberTextMeasurer()
-    return remember {
+    return remember(
+        firstEmoji,
+        emojiFontSize,
+    ) {
         with(density) {
-            firstEmoji.run {
-                textMeasurer.measure(
-                    text = firstEmoji,
-                    style = TextStyle(
-                        fontSize = emojiFontSize,
-                    ),
-                ).size.width.toDp()
-            }
+            textMeasurer.measure(
+                text = firstEmoji,
+                style = TextStyle(
+                    fontSize = emojiFontSize,
+                ),
+            ).size.width.toDp()
         }
     }
 }

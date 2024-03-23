@@ -6,11 +6,8 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,14 +40,10 @@ fun ComposeEmojiPickerEmojiUI(
     onLongClick: (() -> Unit)? = null,
 ) {
     if (isLoading) {
-        Box(
-            modifier = modifier
-                .size(
-                    size = loadingSize,
-                )
-                .clip(
-                    shape = shape,
-                ),
+        ComposeEmojiPickerEmojiLoadingUI(
+            modifier = modifier,
+            loadingSize = loadingSize,
+            shape = shape,
         )
     } else {
         Box(
@@ -78,8 +71,25 @@ fun ComposeEmojiPickerEmojiUI(
                         emojiSupportMatch = EmojiSupportMatch.None
                     ),
                     textAlign = TextAlign.Center,
-                )
+                ),
             )
         }
     }
+}
+
+@Composable
+private fun ComposeEmojiPickerEmojiLoadingUI(
+    modifier: Modifier,
+    loadingSize: Dp,
+    shape: Shape
+) {
+    Box(
+        modifier = modifier
+            .size(
+                size = loadingSize,
+            )
+            .clip(
+                shape = shape,
+            ),
+    )
 }
