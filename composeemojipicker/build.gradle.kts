@@ -55,7 +55,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.6.4")
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("androidx.emoji2:emoji2:1.4.0")
-    implementation("com.github.Abhimanyu14:emoji-core:1.0.10")
+    implementation("com.github.Abhimanyu14:emoji-core:1.0.11")
 }
 
 
