@@ -34,7 +34,6 @@ import com.makeappssimple.abhimanyu.composeemojipicker.utils.StatusBarPadding
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultEmojiFontSize
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultEmojiPadding
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.isEmojiCharacterRenderable
-import emoji.core.datasource.EmojiDataSource
 import emoji.core.datasource.EmojiDataSourceImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -119,18 +118,17 @@ fun ComposeEmojiPickerBottomSheetUI(
         withContext(
             context = Dispatchers.IO,
         ) {
-            val emojiDataSource: EmojiDataSource = EmojiDataSourceImpl(
-                cacheFile = File(
-                    context.cacheDir,
-                    ComposeEmojiPickerBottomSheetConstants.CACHE_FILE_NAME,
-                ),
-            )
             withContext(
                 context = Dispatchers.Main,
             ) {
                 emojisResult = try {
                     MyResult.Success(
-                        data = emojiDataSource.getAllEmojis().map { networkEmoji ->
+                        data = EmojiDataSourceImpl().getAllEmojis(
+                            cacheFile = File(
+                                context.cacheDir,
+                                ComposeEmojiPickerBottomSheetConstants.CACHE_FILE_NAME,
+                            ),
+                        ).map { networkEmoji ->
                             Emoji(
                                 networkEmoji = networkEmoji,
                             )
