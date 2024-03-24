@@ -1,4 +1,4 @@
-package com.makeappssimple.abhimanyu.composeemojipicker
+package com.makeappssimple.abhimanyu.composeemojipicker.app
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -20,7 +20,9 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.makeappssimple.abhimanyu.composeemojipicker.utils.capitalizeWords
+import com.makeappssimple.abhimanyu.composeemojipicker.ComposeEmojiPickerBottomSheetUI
+import com.makeappssimple.abhimanyu.composeemojipicker.ComposeEmojiPickerEmojiUI
+import com.makeappssimple.abhimanyu.composeemojipicker.app.utils.capitalizeWords
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

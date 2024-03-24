@@ -43,7 +43,7 @@ import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultPlaceholderT
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ComposeEmojiPickerSearchBar(
+internal fun ComposeEmojiPickerSearchBar(
     modifier: Modifier = Modifier,
 
     isAutoFocusEnabled: Boolean = true,

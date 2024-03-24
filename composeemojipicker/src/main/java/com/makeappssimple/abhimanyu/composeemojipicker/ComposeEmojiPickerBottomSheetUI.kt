@@ -56,7 +56,7 @@ private object ComposeEmojiPickerBottomSheetConstants {
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ComposeEmojiPickerBottomSheetUI(
+public fun ComposeEmojiPickerBottomSheetUI(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     searchBarColor: Color = MaterialTheme.colorScheme.primaryContainer,

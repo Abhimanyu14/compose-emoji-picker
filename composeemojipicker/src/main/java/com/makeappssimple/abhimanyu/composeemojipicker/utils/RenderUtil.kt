@@ -3,7 +3,7 @@ package com.makeappssimple.abhimanyu.composeemojipicker.utils
 import androidx.emoji2.text.EmojiCompat
 import com.makeappssimple.abhimanyu.composeemojipicker.Emoji
 
-fun isEmojiCharacterRenderable(
+internal fun isEmojiCharacterRenderable(
     emojiCharacter: String,
 ): Boolean {
     return EmojiCompat.isConfigured() &&
@@ -20,7 +20,7 @@ fun isEmojiCharacterRenderable(
         expression = "isEmojiCharacterRenderable(emoji.character)",
     ),
 )
-fun isEmojiRenderable(
+internal fun isEmojiRenderable(
     emoji: Emoji,
 ): Boolean {
     return EmojiCompat.isConfigured() &&

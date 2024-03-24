@@ -14,14 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 
 @Composable
-fun NavigationBarPadding() {
+internal fun NavigationBarPadding() {
     Spacer(
         modifier = Modifier.navigationBarPadding(),
     )
 }
 
 @Composable
-fun StatusBarPadding() {
+internal fun StatusBarPadding() {
     Spacer(
         modifier = Modifier.statusBarPadding(),
     )

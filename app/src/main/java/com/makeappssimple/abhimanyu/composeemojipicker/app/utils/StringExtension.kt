@@ -1,4 +1,4 @@
-package com.makeappssimple.abhimanyu.composeemojipicker.utils
+package com.makeappssimple.abhimanyu.composeemojipicker.app.utils
 
 internal fun String.capitalizeWords(): String {
     return this

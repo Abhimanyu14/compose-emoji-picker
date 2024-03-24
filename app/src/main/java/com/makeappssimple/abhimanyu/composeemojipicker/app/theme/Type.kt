@@ -1,4 +1,4 @@
-package com.makeappssimple.abhimanyu.composeemojipicker.ui.theme
+package com.makeappssimple.abhimanyu.composeemojipicker.app.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

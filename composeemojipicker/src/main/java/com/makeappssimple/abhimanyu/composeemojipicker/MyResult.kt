@@ -1,7 +1,7 @@
 package com.makeappssimple.abhimanyu.composeemojipicker
 
-sealed interface MyResult<out T> {
-    object Loading : MyResult<Nothing>
+internal sealed interface MyResult<out T> {
+    data object Loading : MyResult<Nothing>
 
     data class Error(
         val exception: Throwable? = null,

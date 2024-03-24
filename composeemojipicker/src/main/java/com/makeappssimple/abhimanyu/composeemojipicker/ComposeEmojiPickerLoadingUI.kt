@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ComposeEmojiPickerLoadingUI() {
+internal fun ComposeEmojiPickerLoadingUI() {
     Box(
         modifier = Modifier
             .fillMaxWidth()

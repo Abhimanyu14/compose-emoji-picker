@@ -27,7 +27,7 @@ import com.makeappssimple.abhimanyu.composeemojipicker.utils.defaultEmojiUIShape
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ComposeEmojiPickerEmojiUI(
+public fun ComposeEmojiPickerEmojiUI(
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     backgroundColor: Color = Transparent,

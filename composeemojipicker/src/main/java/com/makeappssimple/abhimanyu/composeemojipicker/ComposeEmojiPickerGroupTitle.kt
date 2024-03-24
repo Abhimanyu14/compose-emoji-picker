@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.makeappssimple.abhimanyu.composeemojipicker.utils.capitalizeWords
 
 @Composable
-fun ComposeEmojiPickerGroupTitle(
+internal fun ComposeEmojiPickerGroupTitle(
     modifier: Modifier = Modifier,
     backgroundColor: Color,
     titleTextColor: Color,
