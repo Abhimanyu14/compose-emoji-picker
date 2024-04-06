@@ -1,8 +1,11 @@
+<a href="https://opensource.org/licenses/Apache-2.0" target="_blank"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
+<a href="https://jitpack.io/#Abhimanyu14/compose-emoji-picker" target="_blank"><img alt="License" src="https://jitpack.io/v/Abhimanyu14/compose-emoji-picker.svg"/></a>
+<a href="https://github.com/Abhimanyu14/compose-emoji-picker/stargazers" target="_blank"><img alt="License" src="https://img.shields.io/github/stars/Abhimanyu14/compose-emoji-picker?style=social"/></a>
+<a href="https://github.com/Abhimanyu14/compose-emoji-picker/fork" target="_blank"><img alt="License" src="https://img.shields.io/github/forks/Abhimanyu14/compose-emoji-picker?logo=github&style=social"/></a>
+
 # Compose Emoji Picker
 
-<a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
-
-Compose Emoji Picker uses [Emoji Core](https://github.com/Abhimanyu14/emoji-core) to fetch all the latest emojis and display them in a grid.
+Compose Emoji Picker uses [Emoji Core](https://github.com/Abhimanyu14/emoji-core) to fetch all the latest emojis and display them.
 
 # Features
 
