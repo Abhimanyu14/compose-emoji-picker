@@ -35,10 +35,8 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
-# Web related
-lib/generated_plugin_registrant.dart
-
 # Flutter
+lib/generated_plugin_registrant.dart
 **/GeneratedPluginRegistrant.java
 
 # Flutter/Dart/Pub related
