@@ -161,6 +161,7 @@ build/
 **/.idea/compiler.xml
 
 # IDEA - Git toolbox
+**/.idea/git_toolbox_blame.xml
 **/.idea/git_toolbox_prj.xml
 
 # IDEA - Miscellaneous
