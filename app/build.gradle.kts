@@ -61,7 +61,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.compose.ui:ui:1.6.4")
     implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.6.4")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.7.6")
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("com.google.android.material:compose-theme-adapter:1.2.1")
 
