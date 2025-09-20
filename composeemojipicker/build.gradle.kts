@@ -1,17 +1,30 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("maven-publish")
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.15.0-Beta.1"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 kotlin {
     explicitApi()
+
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation {
+        // Use the set() function to ensure compatibility with older Gradle versions
+        enabled.set(true)
+    }
+
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+    }
 }
 
 android {
     namespace = "com.makeappssimple.abhimanyu.composeemojipicker"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
@@ -35,29 +48,17 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.11"
     }
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.compose.ui:ui:1.6.4")
     implementation("androidx.compose.material3:material3:1.2.1")
-    implementation("androidx.emoji2:emoji2:1.4.0")
+    implementation("androidx.emoji2:emoji2:1.6.0")
     implementation("com.github.Abhimanyu14:emoji-core:1.0.13")
 }
-
 
 publishing {
     publications {

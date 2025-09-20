@@ -1,5 +1,6 @@
 package com.makeappssimple.abhimanyu.composeemojipicker
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -54,6 +55,7 @@ private object ComposeEmojiPickerBottomSheetConstants {
  * @param backgroundColor Whether the incoming min constraints should be passed to content.
  * @param onEmojiLongClick Whether the incoming min constraints should be passed to content.
  */
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 public fun ComposeEmojiPickerBottomSheetUI(
@@ -72,7 +74,9 @@ public fun ComposeEmojiPickerBottomSheetUI(
 ) {
     val context = LocalContext.current
     var emojisResult: MyResult<List<Emoji>> by remember {
-        mutableStateOf(MyResult.Loading)
+        mutableStateOf(
+            value = MyResult.Loading,
+        )
     }
     val emojiGroups: Map<String, List<Emoji>> = remember(
         key1 = emojisResult,
@@ -80,19 +84,22 @@ public fun ComposeEmojiPickerBottomSheetUI(
     ) {
         when (emojisResult) {
             is MyResult.Success -> {
-                (emojisResult as MyResult.Success<List<Emoji>>).data.filter { emoji ->
-                    if (searchText.isBlank()) {
-                        true
-                    } else {
-                        emoji.unicodeName.contains(
-                            other = searchText,
-                        )
+                (emojisResult as MyResult.Success<List<Emoji>>).data
+                    .filter { emoji ->
+                        if (searchText.isBlank()) {
+                            true
+                        } else {
+                            emoji.unicodeName.contains(
+                                other = searchText,
+                            )
+                        }
                     }
-                }.groupBy { emoji ->
-                    emoji.group
-                }.filter { (_, emojis) ->
-                    emojis.isNotEmpty()
-                }
+                    .groupBy { emoji ->
+                        emoji.group
+                    }
+                    .filter { (_, emojis) ->
+                        emojis.isNotEmpty()
+                    }
             }
 
             else -> {
@@ -100,7 +107,9 @@ public fun ComposeEmojiPickerBottomSheetUI(
             }
         }
     }
-    val firstEmoji: String? = remember(emojiGroups) {
+    val firstEmoji: String? = remember(
+        key1 = emojiGroups,
+    ) {
         if (emojiGroups.isNotEmpty()) {
             emojiGroups.values.firstOrNull()?.firstOrNull()?.character
         } else {
@@ -123,26 +132,23 @@ public fun ComposeEmojiPickerBottomSheetUI(
             ) {
                 emojisResult = try {
                     MyResult.Success(
-                        data = EmojiDataSourceImpl().getAllEmojis(
-                            cacheFile = File(
-                                context.cacheDir,
-                                ComposeEmojiPickerBottomSheetConstants.CACHE_FILE_NAME,
-                            ),
-                        ).map { networkEmoji ->
-                            Emoji(
-                                networkEmoji = networkEmoji,
+                        data = EmojiDataSourceImpl()
+                            .getAllEmojis(
+                                cacheFile = File(
+                                    context.cacheDir,
+                                    ComposeEmojiPickerBottomSheetConstants.CACHE_FILE_NAME,
+                                ),
                             )
-                        }.filter {
-                            isEmojiCharacterRenderable(
-                                emojiCharacter = it.character,
-                            )
-                        },
-                    )
-                } catch (
-                    ioException: Exception,
-                ) {
-                    MyResult.Error(
-                        exception = ioException,
+                            .filter {
+                                isEmojiCharacterRenderable(
+                                    emojiCharacter = it.character,
+                                )
+                            }
+                            .map { networkEmoji ->
+                                Emoji(
+                                    networkEmoji = networkEmoji,
+                                )
+                            },
                     )
                 } catch (
                     exception: Exception,
@@ -176,29 +182,45 @@ public fun ComposeEmojiPickerBottomSheetUI(
             modifier = Modifier
                 .fillMaxWidth(),
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth(),
-            ) {
-                when (emojisResult) {
-                    is MyResult.Error -> item {
+            when (emojisResult) {
+                is MyResult.Error -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    ) {
                         ComposeEmojiPickerErrorUI()
+                        NavigationBarPadding()
                     }
+                }
 
-                    MyResult.Loading -> item {
+                is MyResult.Loading -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    ) {
                         ComposeEmojiPickerLoadingUI()
+                        NavigationBarPadding()
                     }
+                }
 
-                    is MyResult.Success -> {
-                        if (firstEmoji == null || emojiWidth == null) {
-                            item {
-                                ComposeEmojiPickerEmptyUI()
-                            }
-                        } else {
-                            val (columnCount, itemPadding) = getColumnData(
-                                maxColumnWidth = maxWidth,
-                                emojiWidth = emojiWidth,
-                            )
+                is MyResult.Success -> {
+                    if (firstEmoji == null || emojiWidth == null) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                        ) {
+                            ComposeEmojiPickerEmptyUI()
+                            NavigationBarPadding()
+                        }
+                    } else {
+                        val (columnCount, itemPadding) = getColumnData(
+                            maxColumnWidth = maxWidth,
+                            emojiWidth = emojiWidth,
+                        )
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                        ) {
                             emojiGroups.map { (group, emojis) ->
                                 stickyHeader {
                                     ComposeEmojiPickerGroupTitle(
@@ -229,7 +251,9 @@ public fun ComposeEmojiPickerBottomSheetUI(
                                                         onEmojiClick(emoji)
                                                     },
                                                     onLongClick = {
-                                                        onEmojiLongClick?.invoke(emoji)
+                                                        onEmojiLongClick?.invoke(
+                                                            emoji
+                                                        )
                                                     },
                                                 )
                                             }
@@ -237,11 +261,11 @@ public fun ComposeEmojiPickerBottomSheetUI(
                                     }
                                 }
                             }
+                            item {
+                                NavigationBarPadding()
+                            }
                         }
                     }
-                }
-                item {
-                    NavigationBarPadding()
                 }
             }
         }
@@ -275,16 +299,22 @@ private fun rememberEmojiWidth(
     val density = LocalDensity.current
     val textMeasurer = rememberTextMeasurer()
     return remember(
-        firstEmoji,
-        emojiFontSize,
+        key1 = firstEmoji,
+        key2 = emojiFontSize,
     ) {
-        with(density) {
-            textMeasurer.measure(
-                text = firstEmoji,
-                style = TextStyle(
-                    fontSize = emojiFontSize,
-                ),
-            ).size.width.toDp()
+        with(
+            receiver = density,
+        ) {
+            textMeasurer
+                .measure(
+                    text = firstEmoji,
+                    style = TextStyle(
+                        fontSize = emojiFontSize,
+                    ),
+                )
+                .size
+                .width
+                .toDp()
         }
     }
 }

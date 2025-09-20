@@ -3,7 +3,6 @@ package com.makeappssimple.abhimanyu.composeemojipicker.app
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,7 +51,6 @@ fun ComposeEmojiPickerDemo() {
                 searchText = ""
             },
             dragHandle = null,
-            windowInsets = WindowInsets(0),
         ) {
             Column(
                 modifier = Modifier
