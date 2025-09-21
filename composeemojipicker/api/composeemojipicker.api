@@ -1,7 +1,7 @@
-public final class com/makeappssimple/abhimanyu/composeemojipicker/ComposableSingletons$ComposeEmojiPickerBottomSheetUIKt {
-	public static final field INSTANCE Lcom/makeappssimple/abhimanyu/composeemojipicker/ComposableSingletons$ComposeEmojiPickerBottomSheetUIKt;
+public final class com/makeappssimple/abhimanyu/composeemojipicker/ComposableSingletons$ComposeEmojiPickerEmojisListKt {
+	public static final field INSTANCE Lcom/makeappssimple/abhimanyu/composeemojipicker/ComposableSingletons$ComposeEmojiPickerEmojisListKt;
 	public fun <init> ()V
-	public final fun getLambda$-701705484$composeemojipicker_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$685756242$composeemojipicker_release ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class com/makeappssimple/abhimanyu/composeemojipicker/ComposableSingletons$ComposeEmojiPickerSearchBarKt {
@@ -12,6 +12,7 @@ public final class com/makeappssimple/abhimanyu/composeemojipicker/ComposableSin
 
 public final class com/makeappssimple/abhimanyu/composeemojipicker/ComposeEmojiPickerBottomSheetUIKt {
 	public static final fun ComposeEmojiPickerBottomSheetUI-4Zs-dAw (Landroidx/compose/ui/Modifier;JJJLandroidx/compose/ui/text/TextStyle;JLjava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun ComposeEmojiPickerBottomSheetUI-Ev1hC6E (Landroidx/compose/ui/Modifier;JJJLandroidx/compose/ui/text/TextStyle;JLandroidx/compose/foundation/text/input/TextFieldState;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/makeappssimple/abhimanyu/composeemojipicker/ComposeEmojiPickerEmojiUIKt {
