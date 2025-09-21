@@ -1,9 +1,4 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import java.io.FileInputStream
-import java.util.Properties
-
-val keystoreProperties = Properties()
-keystoreProperties.load(FileInputStream(rootProject.file("key.properties")))
 
 plugins {
     id("com.android.application")
@@ -14,15 +9,6 @@ plugins {
 android {
     namespace = "com.makeappssimple.abhimanyu.composeemojipicker.app"
     compileSdk = 36
-
-    signingConfigs {
-        create("release") {
-            storeFile = file(keystoreProperties.getProperty("keyStoreFile"))
-            storePassword = keystoreProperties.getProperty("keyStorePassword")
-            keyAlias = keystoreProperties.getProperty("keyAlias")
-            keyPassword = keystoreProperties.getProperty("keyPassword")
-        }
-    }
 
     buildFeatures {
         compose = true
@@ -47,7 +33,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
         }
     }
 
