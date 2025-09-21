@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -69,6 +70,58 @@ public fun ComposeEmojiPickerBottomSheetUI(
             groupTitleTextStyle = groupTitleTextStyle,
             emojiFontSize = emojiFontSize,
             searchText = searchText,
+            onEmojiClick = onEmojiClick,
+            onEmojiLongClick = onEmojiLongClick,
+        )
+    }
+}
+
+/**
+ * Mandatory parameters - Only [onEmojiClick] is mandatory parameter.
+ *
+ * @param onEmojiClick Click handler
+ *
+ * @param backgroundColor Whether the incoming min constraints should be passed to content.
+ * @param onEmojiLongClick Whether the incoming min constraints should be passed to content.
+ */
+@SuppressLint("UnusedBoxWithConstraintsScope")
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+public fun ComposeEmojiPickerBottomSheetUI(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
+    searchBarColor: Color = MaterialTheme.colorScheme.primaryContainer,
+
+    groupTitleTextColor: Color = MaterialTheme.colorScheme.onBackground,
+    groupTitleTextStyle: TextStyle = MaterialTheme.typography.headlineMedium,
+
+    emojiFontSize: TextUnit = defaultEmojiFontSize,
+    searchTextFieldState: TextFieldState = TextFieldState(),
+    onEmojiClick: (emoji: Emoji) -> Unit,
+    onEmojiLongClick: ((emoji: Emoji) -> Unit)? = null,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(
+                color = backgroundColor,
+            )
+            .defaultMinSize(
+                minHeight = ComposeEmojiPickerBottomSheetConstants.defaultMinHeight,
+            ),
+    ) {
+        StatusBarPadding()
+        ComposeEmojiPickerSearchBarV2(
+            backgroundColor = backgroundColor,
+            searchBarColor = searchBarColor,
+            searchTextFieldState = searchTextFieldState,
+        )
+        ComposeEmojiPickerEmojisList(
+            backgroundColor = backgroundColor,
+            groupTitleTextColor = groupTitleTextColor,
+            groupTitleTextStyle = groupTitleTextStyle,
+            emojiFontSize = emojiFontSize,
+            searchText = searchTextFieldState.text.toString(),
             onEmojiClick = onEmojiClick,
             onEmojiLongClick = onEmojiLongClick,
         )

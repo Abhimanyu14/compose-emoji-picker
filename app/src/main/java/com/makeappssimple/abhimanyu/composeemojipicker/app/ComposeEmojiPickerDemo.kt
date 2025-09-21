@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -32,13 +34,17 @@ fun ComposeEmojiPickerDemo() {
     )
 
     var isModalBottomSheetVisible by remember {
-        mutableStateOf(false)
+        mutableStateOf(
+            value = false,
+        )
     }
     var selectedEmoji by remember {
-        mutableStateOf("😃")
+        mutableStateOf(
+            value = "😃",
+        )
     }
-    var searchText by remember {
-        mutableStateOf("")
+    val searchTextFieldState = remember {
+        TextFieldState()
     }
 
     if (isModalBottomSheetVisible) {
@@ -48,7 +54,7 @@ fun ComposeEmojiPickerDemo() {
             tonalElevation = 0.dp,
             onDismissRequest = {
                 isModalBottomSheetVisible = false
-                searchText = ""
+                searchTextFieldState.clearText()
             },
             dragHandle = null,
         ) {
@@ -68,10 +74,7 @@ fun ComposeEmojiPickerDemo() {
                             Toast.LENGTH_SHORT,
                         ).show()
                     },
-                    searchText = searchText,
-                    updateSearchText = { updatedSearchText ->
-                        searchText = updatedSearchText
-                    },
+                    searchTextFieldState = searchTextFieldState,
                 )
             }
         }
@@ -81,7 +84,9 @@ fun ComposeEmojiPickerDemo() {
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(
+                all = 16.dp,
+            ),
     ) {
         ComposeEmojiPickerEmojiUI(
             emojiCharacter = selectedEmoji,
