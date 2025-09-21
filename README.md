@@ -11,7 +11,7 @@ Compose Emoji Picker uses [Emoji Core](https://github.com/Abhimanyu14/emoji-core
 
 1. Added checks to skip emojis that can not be rendered instead of showing them as tofu (􏿿).
 2. Searching and Filtering
-3. All emoji from Unicode emoji version 15.0 (latest) are available. (as supported by device)
+3. All emoji from Unicode emoji version 17.0 (latest) are available. (as supported by device)
 4. Sticky header for the group name
 
 # Setup
@@ -37,11 +37,98 @@ dependencies {
 }
 ```
 
-# Demo 
+# Demo
 
 https://github.com/Abhimanyu14/compose-emoji-picker/assets/29737108/88491846-bbba-4543-b79e-4166d7ddb6c0
 
 # Usage
+
+<details>
+
+<summary>Using State based TextField (TextFieldState)</summary>
+
+```kotlin
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ComposeEmojiPickerDemo() {
+    val context = LocalContext.current
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+    )
+
+    var isModalBottomSheetVisible by remember {
+        mutableStateOf(
+            value = false,
+        )
+    }
+    var selectedEmoji by remember {
+        mutableStateOf(
+            value = "😃",
+        )
+    }
+    val searchTextFieldState = remember {
+        TextFieldState()
+    }
+
+    if (isModalBottomSheetVisible) {
+        ModalBottomSheet(
+            sheetState = sheetState,
+            shape = RectangleShape,
+            tonalElevation = 0.dp,
+            onDismissRequest = {
+                isModalBottomSheetVisible = false
+                searchTextFieldState.clearText()
+            },
+            dragHandle = null,
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+            ) {
+                ComposeEmojiPickerBottomSheetUI(
+                    onEmojiClick = { emoji ->
+                        isModalBottomSheetVisible = false
+                        selectedEmoji = emoji.character
+                    },
+                    onEmojiLongClick = { emoji ->
+                        Toast.makeText(
+                            context,
+                            emoji.unicodeName.capitalizeWords(),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    },
+                    searchTextFieldState = searchTextFieldState,
+                )
+            }
+        }
+    }
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                all = 16.dp,
+            ),
+    ) {
+        ComposeEmojiPickerEmojiUI(
+            emojiCharacter = selectedEmoji,
+            onClick = {
+                isModalBottomSheetVisible = true
+            },
+            fontSize = 56.sp,
+        )
+    }
+}
+```
+
+</details>
+
+<details>
+
+<summary>Using Value based TextField</summary>
 
 ```kotlin
 @OptIn(ExperimentalMaterial3Api::class)
@@ -116,10 +203,12 @@ fun ComposeEmojiPickerDemo() {
 }
 ```
 
+</details>
+
 # Dependencies
 
-* Jetpack Compose dependencies
-* emoji2
+- Jetpack Compose dependencies
+- emoji2
 
 # Issues
 
@@ -128,8 +217,8 @@ You can also directly reach out to me via [LinkedIn](https://www.linkedin.com/in
 
 ## Find this repository useful? ♥️
 
-Support it by joining __[stargazers](https://github.com/Abhimanyu14/compose-emoji-picker/stargazers)__ for this repository. 🌟  
-Also __[follow](https://github.com/Abhimanyu14)__ me for my next creations! 🤗
+Support it by joining **[stargazers](https://github.com/Abhimanyu14/compose-emoji-picker/stargazers)** for this repository. 🌟  
+Also **[follow](https://github.com/Abhimanyu14)** me for my next creations! 🤗
 
 # License
 
