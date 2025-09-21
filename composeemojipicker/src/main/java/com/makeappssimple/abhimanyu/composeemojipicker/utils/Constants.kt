@@ -23,3 +23,5 @@ internal val defaultEmojiUIShape = CircleShape
  * String
  */
 internal const val defaultPlaceholderText = "Search Emojis"
+
+internal const val CACHE_FILE_NAME = "http_cache"
