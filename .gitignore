@@ -107,6 +107,7 @@ proguard/
 .idea/misc.xml
 .idea/gradle.xml
 .idea/inspectionProfiles/Project_Default.xml
+.intellijPlatform/
 
 # Gradle
 .gradle/
