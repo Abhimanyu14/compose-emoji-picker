@@ -241,7 +241,7 @@ build/
 .vscode/
 
 # Xcode - Icon must end with two \r
-Icon
+# Icon
 
 # Xcode - Thumbnails
 ._*
