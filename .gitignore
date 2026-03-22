@@ -343,6 +343,12 @@ iOSInjectionProject/
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
 
+# Gradle
+!src/**/build/
+
+# Node
+node_modules/
+
 # Miscellaneous
 *.pyc
 *.swp
