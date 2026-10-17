@@ -114,10 +114,10 @@ internal fun ComposeEmojiPickerSearchBar(
             ),
             singleLine = true,
             cursorBrush = cursorBrush,
-            decorationBox = {
+            decorationBox = { innerTextField ->
                 TextFieldDefaults.DecorationBox(
                     value = text,
-                    innerTextField = it,
+                    innerTextField = innerTextField,
                     enabled = true,
                     singleLine = true,
                     visualTransformation = VisualTransformation.None,

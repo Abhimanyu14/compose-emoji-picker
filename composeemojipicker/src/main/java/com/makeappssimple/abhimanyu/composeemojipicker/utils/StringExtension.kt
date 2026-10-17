@@ -4,8 +4,8 @@ internal fun String.capitalizeWords(): String {
     return this
         .split(' ')
         .joinToString(" ") { word ->
-            word.lowercase().replaceFirstChar {
-                it.uppercaseChar()
+            word.lowercase().replaceFirstChar { char ->
+                char.uppercaseChar()
             }
         }
 }

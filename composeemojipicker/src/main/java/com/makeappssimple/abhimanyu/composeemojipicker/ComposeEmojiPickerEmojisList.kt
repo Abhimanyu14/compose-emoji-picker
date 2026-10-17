@@ -163,9 +163,9 @@ internal fun ComposeEmojiPickerEmojisList(
                                     CACHE_FILE_NAME,
                                 ),
                             )
-                            .filter {
+                            .filter { networkEmoji ->
                                 isEmojiCharacterRenderable(
-                                    emojiCharacter = it.character,
+                                    emojiCharacter = networkEmoji.character,
                                 )
                             }
                             .map { networkEmoji ->
@@ -221,14 +221,14 @@ internal fun ComposeEmojiPickerEmojisList(
                         modifier = Modifier
                             .fillMaxWidth(),
                     ) {
-                        uiItems.forEach {
-                            when (it) {
+                        uiItems.forEach { uiItem ->
+                            when (uiItem) {
                                 is ComposeEmojiPickerBottomSheetUIItem.EmojiGroupHeader -> {
                                     stickyHeader {
                                         ComposeEmojiPickerGroupTitle(
                                             backgroundColor = backgroundColor,
                                             titleTextColor = groupTitleTextColor,
-                                            titleText = it.title,
+                                            titleText = uiItem.title,
                                             titleTextStyle = groupTitleTextStyle,
                                         )
                                     }
@@ -242,7 +242,7 @@ internal fun ComposeEmojiPickerEmojisList(
                                             horizontalArrangement = Arrangement.Start,
                                             verticalAlignment = Alignment.CenterVertically,
                                         ) {
-                                            it.emojis.forEach { emoji ->
+                                            uiItem.emojis.forEach { emoji ->
                                                 ComposeEmojiPickerEmojiUI(
                                                     modifier = Modifier
                                                         .padding(
